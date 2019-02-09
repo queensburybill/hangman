@@ -1,7 +1,170 @@
+/* custom resets */
+body {
+  font-family: source-code-pro, Monaco, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #b2b2b2;
+  background-color: black;
+  margin: 0;
+  padding: 0;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+div, main, header, footer, section, 
+article, aside, nav, p, span, button, input {
+  box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+  box-sizing: border-box;
+  letter-spacing: .08em;
+}
+h1 {
+  font-size: 2.4em;
+  margin-top: 0;
+}
+
+/****************************************/
+/*** COLOR PALETTE **********************/
+/****************************************/
+/* 
+#000 - black
+#fff - white
+#b2b2b2 - light gray
+#525252 - dark gray
+#b02727 - red
+#191919 - button
+#2a2a2a - button:hover 
+*/
+
+
+/****************************************/
+/*** CONTAINER **************************/
+/****************************************/
 .container {
   text-align: center;
-  max-width: 900px;
-  margin: 0 auto;
-  background: #525252;
+  max-width: 1000px;
+  margin: 100px auto 0;
   overflow: hidden;
+}
+
+/****************************************/
+/*** GALLOWS ****************************/
+/****************************************/
+.canvas {
+  position: relative;
+  width: 340px;
+  height: 490px;
+  float: left;
+  background-color: #000;
+  /* border: 1px solid #525252; */
+}
+.gallows {
+  position: absolute;
+  background-color: #b2b2b2;
+}
+.gallows-a {
+  top: 20px;
+  left: 184px;
+  width: 20px;
+  height: 80px;
+}
+.gallows-b {
+  top: 20px;
+  left: 52px;
+  width: 152px;
+  height: 20px;
+}
+.gallows-c {
+  top: 20px;
+  left: 52px;
+  width: 20px;
+  height: 450px;
+}
+.gallows-d {
+  top: 450px;
+  left: 20px;
+  width: 300px;
+  height: 20px;
+}
+
+/****************************************/
+/*** PLAYER INTERFACE *******************/
+/****************************************/
+.interface {
+  width: 660px;
+  height: 490px;
+  float: left;
+  background-color: #000;
+  /* border: 1px solid #525252; */
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+  height: 100%;
+}
+.word {
+  margin: 0 0 70px;
+}
+.alphabet {
+  display: flex;
+  flex-direction: row;
+}
+.alphabet h4 {
+  margin: 0;
+  padding: 5px;
+}
+.alphabet h4:hover {
+  background-color: #191919;
+  cursor: pointer;
+}
+button {
+  color: #b2b2b2;
+  width: 240px;
+  background-color: #191919;
+  border: 1px solid #191919;
+  padding: 7px 20px;
+}
+button:hover {
+  background-color: #2a2a2a;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+}
+.guess {
+  margin-bottom: 70px;
+}
+.guess button {
+  width: 160px;
+  height: 70px;
+  font-size: 1.7em;
+  vertical-align: middle;
+  border: 1px solid #191919;
+}
+.guess input {
+  width: 70px;
+  height: 70px;
+  font-size: 2.4em;
+  color: #b2b2b2;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #000;
+  border: 1px solid #525252;
+  margin: 0 9px 0 0;
+}
+.hint {
+  margin-bottom: 0;
+  color: #525252;
+}
+.hint:hover {
+  color: #b2b2b2;
+  cursor: pointer;
+}
+.won-lost {
+  margin-bottom: 70px;
 }
