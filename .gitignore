@@ -10,6 +10,10 @@
 
 # production
 /build
+*.code-workspace
+
+# design
+/design/*
 
 # misc
 .DS_Store
