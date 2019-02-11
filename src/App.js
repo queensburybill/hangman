@@ -26,7 +26,17 @@ function Alphabet(props) {
   const alphabet = [...Array(26).keys()].map(num => String.fromCharCode(num + 97));
   return (
     <div className="alphabet">
-      {alphabet.map(letter => <h4 key={letter}>{letter}</h4>)}
+      {alphabet.map(letter => {
+        return (
+          <h4 
+            key={letter} 
+            id={letter}
+            onClick={e => props.handleAlphabetGuess(e)}
+          >
+            {letter}
+          </h4>
+        );
+      })}
     </div>
   );
 }
@@ -35,10 +45,14 @@ function Guess(props) {
   return (
     <div className="guess">
       <form>
-        <input type="text" />
+        <input 
+          type="text" 
+          value={props.guessInput}
+          onChange={e => props.handleUserGuess(e)}
+        />
         <button type="submit">guess</button>
-        <h4 className="hint">give me a hint!</h4>
       </form>
+      <h4 className="hint" onClick={props.getHint}>give me a hint!</h4>
     </div>
   );
 }
@@ -61,7 +75,7 @@ function Error() {
 
 // ---  APIs  ---------------------------------------------
 
-const hangmanApi = "http://hangman-api.herokuapp.com";
+const hangmanApi = "https://cors-anywhere.herokuapp.com/http://hangman-api.herokuapp.com";
 const wordnikApi = "http://api.wordnik.com/v4/word.json";
 const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
@@ -74,7 +88,7 @@ class App extends Component {
     hangman: "",
     token: "",
     solution: "",
-    definition: "",
+    definition: "Here's a placeholder definition.",
     guessInput: "",
     inputError: false,
     lettersWrong: [],
@@ -88,6 +102,32 @@ class App extends Component {
     this.setState({ gameState: "running" }, () => this.getHangman());
   }
 
+  handleUserGuess = (e) => {
+    let guessInput = e.target.value;
+    this.setState({ guessInput });
+  }
+
+  handleAlphabetGuess = (e) => {
+    let guessInput = e.target.textContent;
+    this.setState({ guessInput });
+  }
+
+  handleSubmitGuess = (e) => {
+    e.preventDefault();
+  }
+
+  handleCorrectGuess = (letter) => {
+     
+  }
+
+  handleRepeatLetter = (letter) => {
+     
+  }
+
+  handleWrongGuess = (letter) => {
+     
+  }
+
   // ---  SERVICE WORKER  ------------------------------------
   
   send = (url, params = null, method = "GET") => {
@@ -96,10 +136,9 @@ class App extends Component {
       method,
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
       },
       params: params || null
-      // params: params ? JSON.stringify(params) : null
     }).then(response => {
       if (!response.data) {
         throw new Error("Invalid response from server.");
@@ -129,6 +168,20 @@ class App extends Component {
       });
   }
 
+  getHint = () => {
+    let token = this.state.token;
+    console.log(token);
+    return this.send(`${hangmanApi}/hangman/hint`, { token })
+      .then(response => {
+        this.setState({
+          guessInput: response.hint,
+          token: response.token,
+          isLoading: false
+        });
+      });
+  }
+
+// Don't get definition during development
   getSolution = (token) => {
     return this.send(`${hangmanApi}/hangman`, { token })
       .then(response => {
@@ -136,17 +189,39 @@ class App extends Component {
           solution: response.solution,
           token: response.token,
           isLoading: false
-        }, () => this.getDefinition(wordnikApiKey));
+        } //, () => this.getDefinition(wordnikApiKey)
+        );
       });
   }
 
   getDefinition = (api_key) => {
     return this.send(`${wordnikApi}/${this.state.solution}/definitions`, { api_key })
       .then(response => {
+        this.setState({
+          definition: response[0] ? response[0].text : "",
+          isLoading: false
+        });
+      });
+  }
+
+  submitGuess = () => {
+    let token = this.state.token;
+    let letter = this.state.userGuess;
+    return this.send(`${hangmanApi}/hangman`, { token, letter }, "POST")
+      .then(response => {
         console.log(response);
         this.setState({
-          definition: response[0].text,
+          hangman: response.hangman,
+          token: response.token,
           isLoading: false
+        }, () => {
+          if (response.status === 304) {
+            this.handleRepeatLetter(letter);
+          } else if (response.correct) {
+            this.handleCorrectGuess(letter);
+          } else {
+            this.handleWrongGuess(letter);
+          }
         });
       });
   }
@@ -187,13 +262,20 @@ class App extends Component {
                   <div className="word">
                     <Hangman hangman={this.state.hangman} />
                     {this.state.gameState === "running"
-                    ? <Alphabet />
+                    ? <Alphabet 
+                        handleAlphabetGuess={this.handleAlphabetGuess}
+                      />
                     : <h4 className="definition">{this.state.definition}</h4>
                     }
                   </div>
                   {/* A game that's either won or lost changes the view again. */}
                   {this.state.gameState === "running"
-                  ? <Guess />
+                  ? <Guess
+                    token={this.state.token}
+                    guessInput={this.state.guessInput}
+                    handleUserGuess={this.handleUserGuess}
+                    getHint={this.getHint}
+                   />
                   : <WonLostMessage />
                   }
                   <NewGame handleNewGame={this.handleNewGame}/>
