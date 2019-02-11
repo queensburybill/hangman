@@ -105,7 +105,13 @@ class App extends Component {
   }
 
   handleNewGame = () => {
-    this.setState({ gameState: "running" }, () => this.getHangman());
+    this.setState({ 
+      gameState: "running",
+      guessInput: "",
+      lettersCorrect: [],
+      lettersWrong: [],
+      inputError: false,
+    }, () => this.getHangman());
   }
 
   handleUserGuess = (e) => {
@@ -121,12 +127,13 @@ class App extends Component {
   handleSubmitGuess = (e) => {
     e.preventDefault();
     this.submitGuess();
-    this.setState({ inputError: false });
+    this.setState({ 
+      inputError: false,
+      guessInput: ""
+    });
   }
 
   handleGuessResponse = (letter, correct, status = null) => {
-    // let h1 = document.getElementById(letter);
-    // let input = document.getElementById("guess-input"); 
     if (status === 304) {
       this.setState({ inputError: true });
     } else if (correct) {
@@ -141,8 +148,6 @@ class App extends Component {
   // ---  SERVICE WORKER  ------------------------------------
   
   send = (url, params = null, method = "GET") => {
-    let myParams = { "params": params };
-    console.log(myParams);
     this.setState({ isLoading: true });
     return axios(url, {
       method,
@@ -159,11 +164,15 @@ class App extends Component {
       }
     })
     .catch((error)=> {
-      this.setState({
-        isLoading: false,
-        isError: true,
-        errorMessage: error.message
-      }, console.log(error.message));
+      if (error.response.status === 304) {
+        return error.response.status;
+      } else {
+        this.setState({
+          isLoading: false,
+          isError: true,
+          errorMessage: error.message
+        }, console.log(error.message));
+      }
     });
   };
 
@@ -182,7 +191,6 @@ class App extends Component {
 
   getHint = () => {
     let token = this.state.token;
-    console.log(token);
     return this.send(`${hangmanApi}/hangman/hint`, { token })
       .then(response => {
         this.setState({
@@ -221,15 +229,17 @@ class App extends Component {
     let letter = this.state.guessInput;
     return this.send(`${hangmanApi}/hangman`, { token, letter }, "PUT")
       .then(response => {
-        let correct = response.correct;
-        console.log(response);
-        this.setState({
-          hangman: response.hangman,
-          token: response.token,
-          guessInput: "",
-          isLoading: false
-        }, () => this.handleGuessResponse(letter, correct, response.status)
-        );
+        if (response === 304) {
+          this.setState({ isLoading: false });
+          return this.handleGuessResponse(letter, null, response);
+        } else {
+          let correct = response.correct;
+          this.setState({
+            hangman: response.hangman,
+            token: response.token,
+            isLoading: false
+          }, () => this.handleGuessResponse(letter, correct));
+        }
       });
   }
 
