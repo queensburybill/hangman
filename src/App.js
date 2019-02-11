@@ -27,11 +27,15 @@ function Alphabet(props) {
   return (
     <div className="alphabet">
       {alphabet.map(letter => {
+        let classname = "";
+        if (props.lettersCorrect.includes(letter)) classname = "correct";
+        if (props.lettersWrong.includes(letter)) classname = "wrong";
         return (
           <h4 
             key={letter} 
             id={letter}
             onClick={e => props.handleAlphabetGuess(e)}
+            className={classname}
           >
             {letter}
           </h4>
@@ -44,11 +48,13 @@ function Alphabet(props) {
 function Guess(props) {
   return (
     <div className="guess">
-      <form>
+      <form onSubmit={e => props.handleSubmitGuess(e)}>
         <input 
           type="text" 
           value={props.guessInput}
+          id="guess-input"
           onChange={e => props.handleUserGuess(e)}
+          className={props.inputError ? "repeat" : ""}
         />
         <button type="submit">guess</button>
       </form>
@@ -77,7 +83,7 @@ function Error() {
 
 const hangmanApi = "https://cors-anywhere.herokuapp.com/http://hangman-api.herokuapp.com";
 const wordnikApi = "http://api.wordnik.com/v4/word.json";
-const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
+// const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
 
 // ---  APP COMPONENT  ------------------------------------
@@ -114,23 +120,29 @@ class App extends Component {
 
   handleSubmitGuess = (e) => {
     e.preventDefault();
+    this.submitGuess();
+    this.setState({ inputError: false });
   }
 
-  handleCorrectGuess = (letter) => {
-     
-  }
-
-  handleRepeatLetter = (letter) => {
-     
-  }
-
-  handleWrongGuess = (letter) => {
-     
+  handleGuessResponse = (letter, correct, status = null) => {
+    // let h1 = document.getElementById(letter);
+    // let input = document.getElementById("guess-input"); 
+    if (status === 304) {
+      this.setState({ inputError: true });
+    } else if (correct) {
+      let newLettersCorrect = this.state.lettersCorrect.concat(letter);
+      this.setState({ lettersCorrect: newLettersCorrect });
+    } else {
+      let newLettersWrong = this.state.lettersWrong.concat(letter);
+      this.setState({ lettersWrong: newLettersWrong });
+    }
   }
 
   // ---  SERVICE WORKER  ------------------------------------
   
   send = (url, params = null, method = "GET") => {
+    let myParams = { "params": params };
+    console.log(myParams);
     this.setState({ isLoading: true });
     return axios(url, {
       method,
@@ -206,25 +218,22 @@ class App extends Component {
 
   submitGuess = () => {
     let token = this.state.token;
-    let letter = this.state.userGuess;
-    return this.send(`${hangmanApi}/hangman`, { token, letter }, "POST")
+    let letter = this.state.guessInput;
+    return this.send(`${hangmanApi}/hangman`, { token, letter }, "PUT")
       .then(response => {
+        let correct = response.correct;
         console.log(response);
         this.setState({
           hangman: response.hangman,
           token: response.token,
+          guessInput: "",
           isLoading: false
-        }, () => {
-          if (response.status === 304) {
-            this.handleRepeatLetter(letter);
-          } else if (response.correct) {
-            this.handleCorrectGuess(letter);
-          } else {
-            this.handleWrongGuess(letter);
-          }
-        });
+        }, () => this.handleGuessResponse(letter, correct, response.status)
+        );
       });
   }
+
+  // ---  RENDER  -----------------------------------------------
 
   render() {
     let misses = this.state.lettersWrong.length;
@@ -264,6 +273,8 @@ class App extends Component {
                     {this.state.gameState === "running"
                     ? <Alphabet 
                         handleAlphabetGuess={this.handleAlphabetGuess}
+                        lettersCorrect={this.state.lettersCorrect}
+                        lettersWrong={this.state.lettersWrong}
                       />
                     : <h4 className="definition">{this.state.definition}</h4>
                     }
@@ -273,8 +284,10 @@ class App extends Component {
                   ? <Guess
                     token={this.state.token}
                     guessInput={this.state.guessInput}
+                    inputError={this.state.inputError}
                     handleUserGuess={this.handleUserGuess}
                     getHint={this.getHint}
+                    handleSubmitGuess={this.handleSubmitGuess}
                    />
                   : <WonLostMessage />
                   }

@@ -184,6 +184,12 @@ main {
   background-color: #191919;
   cursor: pointer;
 }
+.alphabet .correct {
+  color: #525252;
+}
+.alphabet .wrong {
+  color: #b02727;
+}
 .definition {
   max-width: 450px;
   line-height: 1.5;
@@ -217,6 +223,9 @@ button:hover {
   background-color: #000;
   border: 1px solid #525252;
   margin: 0 9px 0 0;
+}
+.guess input.repeat {
+  border-color: #b02727;
 }
 .hint {
   margin-bottom: 0;
