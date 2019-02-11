@@ -90,9 +90,9 @@ class App extends Component {
 
   // ---  SERVICE WORKER  ------------------------------------
   
-  send = (hangmanApi, params = null, method = "GET") => {
+  send = (url, params = null, method = "GET") => {
     this.setState({ isLoading: true });
-    return axios(hangmanApi, {
+    return axios(url, {
       method,
       headers: {
         Accept: "application/json",
@@ -152,6 +152,7 @@ class App extends Component {
   }
 
   render() {
+    let misses = this.state.lettersWrong.length;
     return (
       this.state.isLoading 
       ? <Loading />
@@ -164,6 +165,12 @@ class App extends Component {
             <div className="gallows gallows-b"></div>
             <div className="gallows gallows-c"></div>
             <div className="gallows gallows-d"></div>
+            <div className={`gallows body-leg-r${misses < 6 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
+            <div className={`gallows body-leg-l${misses < 5 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
+            <div className={`gallows body-arm-r${misses < 4 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
+            <div className={`gallows body-arm-l${misses < 3 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
+            <div className={`gallows body-torso${misses < 2 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
+            <div className={`body-head${misses < 1 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
           </div>
           <div className="interface">
             <main>

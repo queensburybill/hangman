@@ -90,6 +90,60 @@ h1 {
   width: 300px;
   height: 20px;
 }
+.body-torso {
+  top: 120px;
+  left: 191px;
+  width: 6px;
+  height: 198px;
+}
+.body-leg-r {
+  top: 304px;
+  left: 217px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(-35deg);
+}
+.body-leg-l {
+  top: 304px;
+  left: 165px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(35deg);
+}
+.body-arm-r {
+  top: 180px;
+  left: 217px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(-35deg);
+}
+.body-arm-l {
+  top: 180px;
+  left: 165px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(35deg);
+}
+.body-head {
+  position: absolute;
+  background-color: #000;
+  border-radius: 62px;
+  border: 6px solid #b2b2b2;
+  top: 70px;
+  left: 144px;
+  width: 100px;
+  height: 100px;
+}
+.hide {
+  display: none;
+}
+.red {
+  background-color: #b02727;
+}
+.body-head.red {
+  background-color: #000;
+  border-color: #b02727;
+}
 
 /****************************************/
 /*** PLAYER INTERFACE *******************/
