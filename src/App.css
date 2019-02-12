@@ -172,6 +172,9 @@ main {
 .hangman h1 {
   display: inline;
 }
+.hangman .missed {
+  color: #525252;
+}
 .alphabet {
   display: flex;
   flex-direction: row;
@@ -189,6 +192,11 @@ main {
 }
 .alphabet .wrong {
   color: #b02727;
+}
+.alphabet h4.correct:hover,
+.alphabet h4.wrong:hover {
+  background-color: #000;
+  cursor: pointer;
 }
 .definition {
   max-width: 450px;
@@ -235,7 +243,12 @@ button:hover {
   color: #b2b2b2;
   cursor: pointer;
 }
-.won {
+.won-lost h1 {
   font-size: 3.4em;
+}
+.won {
   color: #fff;
+}
+.lost{
+  color: #b02727;
 }

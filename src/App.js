@@ -13,11 +13,44 @@ function NewGame(props) {
   );
 }
 
+function Gallows(props) {
+  let misses = props.lettersWrong.length;
+  return (
+  <div className="canvas">
+    <div className="gallows gallows-a"></div>
+    <div className="gallows gallows-b"></div>
+    <div className="gallows gallows-c"></div>
+    <div className="gallows gallows-d"></div>
+    <div className={`gallows body-leg-r${misses < 6 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+    <div className={`gallows body-leg-l${misses < 5 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+    <div className={`gallows body-arm-r${misses < 4 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+    <div className={`gallows body-arm-l${misses < 3 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+    <div className={`gallows body-torso${misses < 2 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+    <div className={`body-head${misses < 1 ? " hide" : ""}${misses === 6 ? " red" : ""}`}></div>
+  </div>
+  );
+}
+
 function Hangman(props) {
-  const word = props.hangman.split("");
+  const word = props.gameState === "lost" 
+    ? props.solution.split("")
+    : props.hangman.split("");
   return (
     <div className="hangman">
-      {word.map((letter, i) => <h1 key={i}>{letter}</h1>)}
+      {word.map((letter, i) => {
+        return (
+          <h1 
+            key={`hangman-${i}`}
+            className={`
+              ${props.gameState === "won" 
+                ? "won" 
+                : props.gameState === "lost" && !props.lettersCorrect.includes(letter) 
+                  ? "missed" 
+                  : ""}
+            `}
+          >{letter}</h1>
+        );
+      })}
     </div>
   );
 }
@@ -34,7 +67,7 @@ function Alphabet(props) {
           <h4 
             key={letter} 
             id={letter}
-            onClick={e => props.handleAlphabetGuess(e)}
+            onClick={!!classname ? "" : e => props.handleAlphabetGuess(e)}
             className={classname}
           >
             {letter}
@@ -53,6 +86,7 @@ function Guess(props) {
           type="text" 
           value={props.guessInput}
           id="guess-input"
+          maxLength={1}
           onChange={e => props.handleUserGuess(e)}
           className={props.inputError ? "repeat" : ""}
         />
@@ -64,9 +98,12 @@ function Guess(props) {
 }
 
 function WonLostMessage(props) {
+  let message = props.gameState === "won" ? "You Won!" : "Game Over";
   return (
     <div className="won-lost">
-      <h1 className="won">You Win!</h1>
+      <h1 className={props.gameState === "won" ? "won" : "lost"}>
+        {message}
+      </h1>
     </div>
   );
 }
@@ -94,7 +131,7 @@ class App extends Component {
     hangman: "",
     token: "",
     solution: "",
-    definition: "Here's a placeholder definition.",
+    definition: "Here's a placeholder definition.", // remember to change this back to ""
     guessInput: "",
     inputError: false,
     lettersWrong: [],
@@ -138,14 +175,22 @@ class App extends Component {
       this.setState({ inputError: true });
     } else if (correct) {
       let newLettersCorrect = this.state.lettersCorrect.concat(letter);
-      this.setState({ lettersCorrect: newLettersCorrect });
+      let gameState = this.state.hangman === this.state.solution ? "won" : "running";
+      this.setState({ 
+        lettersCorrect: newLettersCorrect,
+        gameState
+      });
     } else {
       let newLettersWrong = this.state.lettersWrong.concat(letter);
-      this.setState({ lettersWrong: newLettersWrong });
+      let gameState = newLettersWrong.length >= 6 ? "lost" : "running";
+      this.setState({ 
+        lettersWrong: newLettersWrong,
+        gameState
+      });
     }
   }
 
-  // ---  SERVICE WORKER  ------------------------------------
+  // ---  REQUEST WORKER  ------------------------------------
   
   send = (url, params = null, method = "GET") => {
     this.setState({ isLoading: true });
@@ -246,7 +291,6 @@ class App extends Component {
   // ---  RENDER  -----------------------------------------------
 
   render() {
-    let misses = this.state.lettersWrong.length;
     return (
       this.state.isLoading 
       ? <Loading />
@@ -254,18 +298,9 @@ class App extends Component {
         ? <Error />
         : (
         <div className="container">
-          <div className="canvas">
-            <div className="gallows gallows-a"></div>
-            <div className="gallows gallows-b"></div>
-            <div className="gallows gallows-c"></div>
-            <div className="gallows gallows-d"></div>
-            <div className={`gallows body-leg-r${misses < 6 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-            <div className={`gallows body-leg-l${misses < 5 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-            <div className={`gallows body-arm-r${misses < 4 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-            <div className={`gallows body-arm-l${misses < 3 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-            <div className={`gallows body-torso${misses < 2 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-            <div className={`body-head${misses < 1 ? " hide" : ""}${misses === 7 ? " red" : ""}`}></div>
-          </div>
+          <Gallows 
+            lettersWrong={this.state.lettersWrong}
+          />
           <div className="interface">
             <main>
               {/* A new instance of the game displays the title and new game button. */}
@@ -273,13 +308,20 @@ class App extends Component {
               ? (
                 <div>
                   <h1>hangman</h1>
-                  <NewGame handleNewGame={this.handleNewGame}/>
+                  <NewGame 
+                    handleNewGame={this.handleNewGame}
+                  />
                 </div>
               ) : (
                 // A game that's running changes the view.
                 <div>
                   <div className="word">
-                    <Hangman hangman={this.state.hangman} />
+                    <Hangman 
+                      hangman={this.state.hangman} 
+                      solution={this.state.solution}
+                      gameState={this.state.gameState}
+                      lettersCorrect={this.state.lettersCorrect}
+                    />
                     {this.state.gameState === "running"
                     ? <Alphabet 
                         handleAlphabetGuess={this.handleAlphabetGuess}
@@ -292,16 +334,20 @@ class App extends Component {
                   {/* A game that's either won or lost changes the view again. */}
                   {this.state.gameState === "running"
                   ? <Guess
-                    token={this.state.token}
-                    guessInput={this.state.guessInput}
-                    inputError={this.state.inputError}
-                    handleUserGuess={this.handleUserGuess}
-                    getHint={this.getHint}
-                    handleSubmitGuess={this.handleSubmitGuess}
+                      token={this.state.token}
+                      guessInput={this.state.guessInput}
+                      inputError={this.state.inputError}
+                      handleUserGuess={this.handleUserGuess}
+                      getHint={this.getHint}
+                      handleSubmitGuess={this.handleSubmitGuess}
                    />
-                  : <WonLostMessage />
+                  : <WonLostMessage
+                      gameState={this.state.gameState} 
+                    />
                   }
-                  <NewGame handleNewGame={this.handleNewGame}/>
+                  <NewGame 
+                    handleNewGame={this.handleNewGame}
+                  />
                 </div>
               )}
             </main>
