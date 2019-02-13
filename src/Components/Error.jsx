@@ -1,7 +1,12 @@
 import React from 'react';
 
 function Error(props) {
-  return <p>{props.errorMessage}</p>
+  return (
+    <div>
+      <p>{props.errorMessage}</p>
+      <p>Please try again later.</p>
+    </div>
+  );
 }
 
 export default Error;

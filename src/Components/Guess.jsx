@@ -5,6 +5,7 @@ function Guess(props) {
   return (
     <div className={isGameRunning ? "guess" : "hide"}>
       <form onSubmit={e => props.handleSubmitGuess(e)}>
+      {console.log(props.isLoading)}
         <input 
           type="text" 
           value={props.guessInput}
@@ -13,9 +14,17 @@ function Guess(props) {
           onChange={e => props.handleUserGuess(e)}
           className={props.inputError ? "repeat" : ""}
         />
-        <button type="submit">guess</button>
+        <button 
+          type="submit"
+          disabled={props.isLoading}
+        >
+          {props.isLoading ? "loading" : "guess"}
+        </button>
       </form>
-      <h4 className="hint" onClick={props.getHint}>give me a hint!</h4>
+      <h4 
+        className={`hint${props.isLoading ? " hint-prevent" : ""}`} 
+        onClick={(e) => props.handleGetHint(e)}
+      >give me a hint!</h4>
     </div>
   );
 }

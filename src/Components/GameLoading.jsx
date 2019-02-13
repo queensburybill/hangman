@@ -1,7 +1,7 @@
 import React from 'react';
 import loader from "../img/loader.gif";
 
-function Loading() {
+function GameLoading() {
   return (
     <div>
       <h2>Loading</h2>
@@ -10,4 +10,4 @@ function Loading() {
   );
 }
 
-export default Loading;
+export default GameLoading;

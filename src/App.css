@@ -1,4 +1,6 @@
-/* custom resets */
+/****************************************/
+/*** CUSTOM RESETS **********************/
+/****************************************/
 body {
   font-family: Monaco, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -41,11 +43,20 @@ h1 {
 /*** CONTAINER **************************/
 /****************************************/
 .container {
-  text-align: center;
-  max-width: 1000px;
-  margin: 100px auto 0;
-  overflow: hidden;
+  margin-top: 20px;
+  transition: margin-top 1.5s;
 }
+
+@media (min-width: 1000px) {
+  .container {
+    text-align: center;
+    max-width: 1000px;
+    margin: 100px auto 0;
+    margin-top: 100px;
+    transition: margin-top 1.5s;
+  }
+}
+
 
 /****************************************/
 /*** GALLOWS ****************************/
@@ -141,14 +152,16 @@ h1 {
 /****************************************/
 /*** PLAYER INTERFACE *******************/
 /****************************************/
+
+/*** overall ****************************/
 .interface {
   width: 660px;
   height: 490px;
   float: left;
   background-color: #000;
-  /* border: 1px solid #525252; */
 }
 main {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -159,6 +172,11 @@ main {
 .word, .guess, .won-lost {
   margin: 0 0 90px;
 }
+.hide {
+  display: none;
+}
+
+/*** hangman ****************************/
 .hangman {
   margin-bottom: 1em;
 }
@@ -168,6 +186,8 @@ main {
 .hangman .missed {
   color: #525252;
 }
+
+/*** alphabet & definition **************/
 .alphabet {
   display: flex;
   flex-direction: row;
@@ -191,10 +211,16 @@ main {
   background-color: #000;
   cursor: pointer;
 }
+.alphabet h4.alphabet-prevent:hover {
+  background-color: #000;
+  cursor: not-allowed;
+}
 .definition {
   max-width: 450px;
   line-height: 1.5;
 }
+
+/*** buttons ****************************/
 button {
   color: #b2b2b2;
   width: 240px;
@@ -207,12 +233,19 @@ button:hover {
   border: 1px solid #2a2a2a;
   cursor: pointer;
 }
+
+/*** guess button/input ******************/
 .guess button {
   width: 160px;
   height: 70px;
   font-size: 1.7em;
   vertical-align: middle;
   border: 1px solid #191919;
+}
+.guess button:disabled {
+  background-color: #191919;
+  border: 1px solid #191919;
+  cursor: not-allowed;
 }
 .guess input {
   width: 70px;
@@ -228,6 +261,8 @@ button:hover {
 .guess input.repeat {
   border-color: #b02727;
 }
+
+/*** hint ********************************/
 .hint {
   margin-bottom: 0;
   color: #525252;
@@ -236,6 +271,12 @@ button:hover {
   color: #b2b2b2;
   cursor: pointer;
 }
+.hint-prevent:hover {
+  color: #525252;
+  cursor: not-allowed;
+}
+
+/*** won/lost message ********************/
 .won-lost h1 {
   font-size: 3.4em;
 }
@@ -245,6 +286,41 @@ button:hover {
 .lost {
   color: #b02727;
 }
-.hide {
-  display: none;
+
+/*** won/lost message ********************/
+.error-modal {
+  position: relative;
+  top: 60px;
+  width: 300px;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #191919;
+  border: 1px solid #525252;
+  box-shadow: 0 0 10px 3px #000;
+}
+.error-modal-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.error-modal-close {
+  position: absolute;
+  color: #525252;
+  top: 7px;
+  right: 10px;
+}
+.error-modal-close:hover {
+  color: #2a2a2a;
+  cursor: pointer;
 }

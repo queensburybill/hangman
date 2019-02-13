@@ -5,14 +5,20 @@ import Gallows from './Components/Gallows';
 import Hangman from './Components/Hangman';
 import Guess from './Components/Guess';
 import WonLostMessage from './Components/WonLostMessage';
-import Loading from './Components/Loading';
+import GameLoading from './Components/GameLoading';
 import Error from './Components/Error';
+import ErrorModal from './Components/ErrorModal';
 import './App.css';
 
 // ---  APIs  ---------------------------------------------
 
-const hangmanApi = "http://hangman-api.herokuapp.com";
-// const hangmanApi = "https://cors-anywhere.herokuapp.com/http://hangman-api.herokuapp.com";
+// hangman api:
+// const hangmanApi = "http://hangman-api.herokuapp.com";
+
+// hangman api prepended with proxy server to circumvent CORS error:
+const hangmanApi = "https://cors-anywhere.herokuapp.com/http://hangman-api.herokuapp.com";
+
+// wordnik api and api key to provide definitions
 const wordnikApi = "http://api.wordnik.com/v4/word.json";
 // const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
@@ -25,41 +31,63 @@ class App extends Component {
     hangman: "",
     token: "",
     solution: "",
-    definition: "Here's a placeholder definition.", // remember to change this back to ""
+    definition: "Here's a placeholder definition for now", // switch this to ""
     guessInput: "",
     inputError: false,
     lettersWrong: [],
     lettersCorrect: [],
+    isGameLoading: false,
     isLoading: false,
+    isGameError: false,
     isError: false,
     errorMessage: ""
   }
 
+  // start a new game
   handleNewGame = () => {
     this.setState({ 
       gameStatus: "running",
       guessInput: "",
+      inputError: false,
       lettersCorrect: [],
       lettersWrong: [],
-      inputError: false,
+      isGameLoading: false,
+      isLoading: false,
+      isGameError: false,
+      isError: false,
+      errorMessage: ""
     }, () => this.getHangman());
   }
 
+  // add user-typed letter to input field via state
   handleUserGuess = (e) => {
     let guessInput = e.target.value;
     this.setState({ guessInput });
   }
 
+  // add chosen alphabet-list letter to input field via state - disallow repeat selection
   handleAlphabetGuess = (e) => {
+    e.preventDefault();
+    if (this.state.isLoading) return;
     let guessInput = e.target.id;
-    let alreadyUsedCorrect = this.state.lettersCorrect.includes(guessInput);
-    let alreadyUsedWrong = this.state.lettersWrong.includes(guessInput);
-    if (alreadyUsedCorrect || alreadyUsedWrong) return;
+    let alreadyUsed = this.state.lettersCorrect.concat(this.state.lettersWrong);
+    if (alreadyUsed.includes(guessInput)) return;
     this.setState({ guessInput });
   }
 
+  handleGetHint = (e) => {
+    e.preventDefault();
+    if (this.state.isLoading) return;
+    this.getHint();
+  }
+
+  // send http request for guess - disallow empty guess
   handleSubmitGuess = (e) => {
     e.preventDefault();
+    if (!this.state.guessInput) {
+      this.setState({ inputError: true });
+      return;
+    }
     this.submitGuess();
     this.setState({ 
       inputError: false,
@@ -67,6 +95,8 @@ class App extends Component {
     });
   }
 
+  // handle repeat letter error (status code 304)
+  // add correctly/incorrectly guessed letters to corresponding props in state
   handleGuessResponse = (letter, correct, status = null) => {
     if (status === 304) {
       this.setState({ inputError: true });
@@ -87,6 +117,16 @@ class App extends Component {
     }
   }
 
+  // handle new game & get solution errors
+  handleGameError = (err) => {
+    this.setState({
+      isGameLoading: false,
+      isGameError: true,
+      errorMessage: err.message
+    }, console.log(err.message));
+  }
+
+  // handle all other errors - status code 304 gets forwarded to handleGuessResponse
   handleError = (err) => {
     if (err.response && err.response.status === 304) {
       this.setState({
@@ -106,10 +146,13 @@ class App extends Component {
     }
   }
 
-  // ---  REQUEST WORKER  ------------------------------------
+  closeErrorModal = () => {
+    this.setState({ isError: false });
+  }
+
+  // ---  REQUESTS WORKER  ------------------------------------
   
   send = (url, params = null, method = "GET") => {
-    this.setState({ isLoading: true });
     return axios(url, {
       method,
       headers: {
@@ -126,23 +169,25 @@ class App extends Component {
     });
   }
 
-  // ---  AJAX REQUESTS  ------------------------------------
+  // ---  HTTP REQUESTS  ------------------------------------
 
   getHangman = () => {
+    this.setState({ isGameLoading: true });
     return this.send(`${hangmanApi}/hangman`, null, "POST")
       .then(response => {
         this.setState({
           hangman: response.hangman,
           token: response.token,
-          isLoading: false
+          isGameLoading: false
         }, () => this.getSolution(this.state.token));
       })
       .catch((error)=> {
-        this.handleError(error);
+        this.handleGameError(error);
       });
   }
 
   getHint = () => {
+    this.setState({ isLoading: true });
     let token = this.state.token;
     return this.send(`${hangmanApi}/hangman/hint`, { token })
       .then(response => {
@@ -157,36 +202,41 @@ class App extends Component {
       });
   }
 
-// Don't get definition during development
   getSolution = (token) => {
+    this.setState({ isGameLoading: true });
     return this.send(`${hangmanApi}/hangman`, { token })
       .then(response => {
         this.setState({
           solution: response.solution,
           token: response.token,
-          isLoading: false
-        } //, () => this.getDefinition(wordnikApiKey)
+          isGameLoading: false
+        },// () => this.getDefinition(wordnikApiKey)   TURN THIS BACK ON WHEN READY!!!
         );
       })
       .catch((error)=> {
-        this.handleError(error);
+        this.handleGameError(error);
       });
   }
 
+  // gets a definition from the wordnik API
   getDefinition = (api_key) => {
+    this.setState({ isGameLoading: true });
     return this.send(`${wordnikApi}/${this.state.solution}/definitions`, { api_key })
       .then(response => {
         this.setState({
           definition: response[0] ? response[0].text : "",
-          isLoading: false
+          isGameLoading: false
         });
       })
+      // Errors caught here result in the game proceeding without a definition
       .catch((error)=> {
-        this.handleError(error);
+        console.log(error);
       });
   }
 
+  // submits guesses from all guess handlers
   submitGuess = () => {
+    this.setState({ isLoading: true });
     let token = this.state.token;
     let letter = this.state.guessInput;
     return this.send(`${hangmanApi}/hangman`, { token, letter }, "PUT")
@@ -213,11 +263,14 @@ class App extends Component {
         />
         <div className="interface">
           <main>
-            {this.state.isLoading 
-            ? <Loading />
-            : this.state.isError
+            {this.state.isGameLoading 
+            // shows loading widget while a new game is loading
+            ? <GameLoading />
+            : this.state.isGameError
+              // shows an error widget if there's a problem creating a new game
               ? <Error errorMessage={this.state.errorMessage} />
               : (
+                // views are shown or hidden based on the state of the game and CSS
                 <div>
                   <Hangman 
                     gameStatus={this.state.gameStatus}
@@ -226,6 +279,7 @@ class App extends Component {
                     lettersCorrect={this.state.lettersCorrect}
                     lettersWrong={this.state.lettersWrong}
                     definition={this.state.definition} 
+                    isLoading={this.state.isLoading}
                     handleAlphabetGuess={this.handleAlphabetGuess}
                   />
                   <Guess
@@ -233,8 +287,9 @@ class App extends Component {
                     token={this.state.token}
                     guessInput={this.state.guessInput}
                     inputError={this.state.inputError}
+                    isLoading={this.state.isLoading}
                     handleUserGuess={this.handleUserGuess}
-                    getHint={this.getHint}
+                    handleGetHint={this.handleGetHint}
                     handleSubmitGuess={this.handleSubmitGuess}
                   />
                   <WonLostMessage
@@ -247,6 +302,12 @@ class App extends Component {
                 </div>
               )}
           </main>
+          {this.state.isError && 
+          // a pop-up which allows one to possibly keep playing after an error
+          <ErrorModal 
+            errorMessage={this.state.errorMessage} 
+            closeErrorModal={this.closeErrorModal}
+          />}
         </div>
       </div>
     );

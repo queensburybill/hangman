@@ -21,7 +21,7 @@ function Alphabet(props) {
             key={letter} 
             id={letter}
             onClick={e => props.handleAlphabetGuess(e)}
-            className={classname}
+            className={`${classname}${props.isLoading ? " alphabet-prevent" : ""}`}
           >
             {letter}
           </h4>
