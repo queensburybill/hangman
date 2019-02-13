@@ -20,7 +20,7 @@ const hangmanApi = "https://cors-anywhere.herokuapp.com/http://hangman-api.herok
 
 // wordnik api and api key to provide definitions
 const wordnikApi = "http://api.wordnik.com/v4/word.json";
-// const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
+const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
 
 // ---  MAIN APP COMPONENT  ---------------------------------
@@ -215,8 +215,7 @@ class App extends Component {
           solution: response.solution,
           token: response.token,
           isGameLoading: false
-        },// () => this.getDefinition(wordnikApiKey)   TURN THIS BACK ON WHEN READY!!!
-        );
+        }, () => this.getDefinition(wordnikApiKey));
       })
       .catch((error)=> {
         this.handleGameError(error);
