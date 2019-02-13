@@ -31,7 +31,7 @@ class App extends Component {
     hangman: "",
     token: "",
     solution: "",
-    definition: "Here's a much much longer placeholder definition for now", // switch this to ""
+    definition: "",
     guessInput: "",
     inputError: false,
     lettersWrong: [],
