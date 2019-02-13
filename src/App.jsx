@@ -274,7 +274,7 @@ class App extends Component {
               // shows an error widget if there's a problem creating a new game
               ? <Error errorMessage={this.state.errorMessage} />
               : (
-                // views are shown or hidden based on the state of the game and CSS
+                // views are shown or hidden with CSS based on the state of the game
                 <div>
                   <Hangman 
                     gameStatus={this.state.gameStatus}
