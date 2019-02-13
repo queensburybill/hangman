@@ -25,3 +25,5 @@ git clone https://github.com/queensburybill/hangman.git
 Then cd into the hangman directory and run `yarn install` followed by `yarn start`
 
 Alternatively you can use `npm install` and `npm start` to start the app.
+
+The app should open on localhost:3000. Enjoy.

@@ -8,7 +8,6 @@ function Guess(props) {
   return (
     <div className={isGameRunning ? "guess" : "hide"}>
       <form onSubmit={e => props.handleSubmitGuess(e)}>
-      {console.log(props.isLoading)}
         <input 
           type="text" 
           value={props.guessInput}
