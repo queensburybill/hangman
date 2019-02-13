@@ -31,7 +31,7 @@ class App extends Component {
     hangman: "",
     token: "",
     solution: "",
-    definition: "Here's a placeholder definition for now", // switch this to ""
+    definition: "Here's a much much longer placeholder definition for now", // switch this to ""
     guessInput: "",
     inputError: false,
     lettersWrong: [],
@@ -72,13 +72,18 @@ class App extends Component {
     let guessInput = e.target.id;
     let alreadyUsed = this.state.lettersCorrect.concat(this.state.lettersWrong);
     if (alreadyUsed.includes(guessInput)) return;
-    this.setState({ guessInput });
+    this.setState({ 
+      guessInput,
+      inputError: false
+    });
   }
 
   handleGetHint = (e) => {
     e.preventDefault();
     if (this.state.isLoading) return;
-    this.getHint();
+    this.setState({
+      inputError: false
+    }, () => this.getHint());
   }
 
   // send http request for guess - disallow empty guess

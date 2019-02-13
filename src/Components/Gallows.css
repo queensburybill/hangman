@@ -1,0 +1,197 @@
+/****************************************/
+/*** COLOR PALETTE **********************/
+/****************************************/
+/* 
+#000 - black
+#fff - white
+#b2b2b2 - light gray
+#525252 - dark gray
+#b02727 - red
+#191919 - button
+#2a2a2a - button:hover 
+*/
+
+/****************************************/
+/*** GALLOWS ****************************/
+/****************************************/
+.canvas {
+  position: relative;
+  width: 340px;
+  height: 490px;
+  margin: 0 auto;
+  background-color: #000;
+}
+.gallows {
+  position: absolute;
+  background-color: #b2b2b2;
+}
+.gallows-a {
+  top: 10px;
+  left: 174px;
+  width: 20px;
+  height: 80px;
+}
+.gallows-b {
+  top: 10px;
+  left: 42px;
+  width: 152px;
+  height: 20px;
+}
+.gallows-c {
+  top: 10px;
+  left: 42px;
+  width: 20px;
+  height: 450px;
+}
+.gallows-d {
+  top: 440px;
+  left: 10px;
+  width: 300px;
+  height: 20px;
+}
+.body-torso {
+  top: 110px;
+  left: 181px;
+  width: 6px;
+  height: 198px;
+}
+.body-leg-r {
+  top: 294px;
+  left: 207px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(-35deg);
+}
+.body-leg-l {
+  top: 294px;
+  left: 155px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(35deg);
+}
+.body-arm-r {
+  top: 170px;
+  left: 207px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(-35deg);
+}
+.body-arm-l {
+  top: 170px;
+  left: 155px;
+  width: 6px;
+  height: 94px;
+  transform: rotate(35deg);
+}
+.body-head {
+  position: absolute;
+  background-color: #000;
+  border-radius: 62px;
+  border: 6px solid #b2b2b2;
+  top: 60px;
+  left: 134px;
+  width: 100px;
+  height: 100px;
+}
+.red {
+  background-color: #b02727;
+}
+.body-head.red {
+  background-color: #000;
+  border-color: #b02727;
+}
+
+/****************************************/
+/*** RESPONSIVE *************************/
+/****************************************/
+
+@media (min-width: 1000px) {
+  .canvas {
+    position: relative;
+    width: 340px;
+    height: 490px;
+    float: left;
+    margin: 0;
+    background-color: #000;
+    /* border: 1px solid #525252; */
+  }
+  .gallows {
+    position: absolute;
+    background-color: #b2b2b2;
+  }
+  .gallows-a {
+    top: 20px;
+    left: 184px;
+    width: 20px;
+    height: 80px;
+  }
+  .gallows-b {
+    top: 20px;
+    left: 52px;
+    width: 152px;
+    height: 20px;
+  }
+  .gallows-c {
+    top: 20px;
+    left: 52px;
+    width: 20px;
+    height: 450px;
+  }
+  .gallows-d {
+    top: 450px;
+    left: 20px;
+    width: 300px;
+    height: 20px;
+  }
+  .body-torso {
+    top: 120px;
+    left: 191px;
+    width: 6px;
+    height: 198px;
+  }
+  .body-leg-r {
+    top: 304px;
+    left: 217px;
+    width: 6px;
+    height: 94px;
+    transform: rotate(-35deg);
+  }
+  .body-leg-l {
+    top: 304px;
+    left: 165px;
+    width: 6px;
+    height: 94px;
+    transform: rotate(35deg);
+  }
+  .body-arm-r {
+    top: 180px;
+    left: 217px;
+    width: 6px;
+    height: 94px;
+    transform: rotate(-35deg);
+  }
+  .body-arm-l {
+    top: 180px;
+    left: 165px;
+    width: 6px;
+    height: 94px;
+    transform: rotate(35deg);
+  }
+  .body-head {
+    position: absolute;
+    background-color: #000;
+    border-radius: 62px;
+    border: 6px solid #b2b2b2;
+    top: 70px;
+    left: 144px;
+    width: 100px;
+    height: 100px;
+  }
+  .red {
+    background-color: #b02727;
+  }
+  .body-head.red {
+    background-color: #000;
+    border-color: #b02727;
+  }
+}

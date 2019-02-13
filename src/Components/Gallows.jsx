@@ -1,4 +1,7 @@
 import React from 'react';
+import './Gallows.css';
+
+// The Gallows component renders the gallows artwork using DOM elements.
 
 function Gallows(props) {
   let misses = props.lettersWrong.length;

@@ -1,7 +1,8 @@
 import React from 'react';
 
-// The Alphabet component renders the letters of the alphabet as clickable elements
+// The Alphabet component enders the letters of the alphabet as clickable elements
 // for the user and indicates previous correct & incorrect choices.
+// It only appears when game status is "running".
 
 function Alphabet(props) {
 
@@ -13,6 +14,8 @@ function Alphabet(props) {
   return (
     <div className={isGameRunning ? "alphabet" : "hide"}>
       {alphabet.map(letter => {
+        // letters are checked against previously used correct/wrong letters
+        // in state and styled accordingly.
         let classname = "";
         if (props.lettersCorrect.includes(letter)) classname = "correct";
         if (props.lettersWrong.includes(letter)) classname = "wrong";

@@ -1,5 +1,8 @@
 import React from 'react';
 
+// The Guess component renders the guess input field, and 
+// guess/hint buttons whenever the game status is "running".
+
 function Guess(props) {
   let isGameRunning = props.gameStatus === "running";
   return (

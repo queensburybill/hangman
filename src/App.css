@@ -38,7 +38,6 @@ h1 {
 #2a2a2a - button:hover 
 */
 
-
 /****************************************/
 /*** CONTAINER **************************/
 /****************************************/
@@ -57,107 +56,16 @@ h1 {
   }
 }
 
-
-/****************************************/
-/*** GALLOWS ****************************/
-/****************************************/
-.canvas {
-  position: relative;
-  width: 340px;
-  height: 490px;
-  float: left;
-  background-color: #000;
-  /* border: 1px solid #525252; */
-}
-.gallows {
-  position: absolute;
-  background-color: #b2b2b2;
-}
-.gallows-a {
-  top: 20px;
-  left: 184px;
-  width: 20px;
-  height: 80px;
-}
-.gallows-b {
-  top: 20px;
-  left: 52px;
-  width: 152px;
-  height: 20px;
-}
-.gallows-c {
-  top: 20px;
-  left: 52px;
-  width: 20px;
-  height: 450px;
-}
-.gallows-d {
-  top: 450px;
-  left: 20px;
-  width: 300px;
-  height: 20px;
-}
-.body-torso {
-  top: 120px;
-  left: 191px;
-  width: 6px;
-  height: 198px;
-}
-.body-leg-r {
-  top: 304px;
-  left: 217px;
-  width: 6px;
-  height: 94px;
-  transform: rotate(-35deg);
-}
-.body-leg-l {
-  top: 304px;
-  left: 165px;
-  width: 6px;
-  height: 94px;
-  transform: rotate(35deg);
-}
-.body-arm-r {
-  top: 180px;
-  left: 217px;
-  width: 6px;
-  height: 94px;
-  transform: rotate(-35deg);
-}
-.body-arm-l {
-  top: 180px;
-  left: 165px;
-  width: 6px;
-  height: 94px;
-  transform: rotate(35deg);
-}
-.body-head {
-  position: absolute;
-  background-color: #000;
-  border-radius: 62px;
-  border: 6px solid #b2b2b2;
-  top: 70px;
-  left: 144px;
-  width: 100px;
-  height: 100px;
-}
-.red {
-  background-color: #b02727;
-}
-.body-head.red {
-  background-color: #000;
-  border-color: #b02727;
-}
-
 /****************************************/
 /*** PLAYER INTERFACE *******************/
 /****************************************/
 
 /*** overall ****************************/
 .interface {
-  width: 660px;
-  height: 490px;
-  float: left;
+  width: 100%;
+  height: 370px;
+  margin-top: 0;
+  clear: right;
   background-color: #000;
 }
 main {
@@ -170,27 +78,72 @@ main {
   height: 100%;
 }
 .word, .guess, .won-lost {
-  margin: 0 0 90px;
+  margin: 0 0 50px;
+}
+.word, .guess, .won-lost, .start {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .hide {
   display: none;
 }
+@media (min-width: 1000px) {
+  .interface {
+    width: 660px;
+    height: 490px;
+    float: left;
+    background-color: #000;
+  }
+  .word, .guess, .won-lost {
+    margin: 0 0 90px;
+  }
+}
 
 /*** hangman ****************************/
 .hangman {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
   margin-bottom: 1em;
+  padding: 0 10px;
 }
 .hangman h1 {
+  font-size: 1.5em;
   display: inline;
+  margin-bottom: 0;
+  transition: font-size 1s;
 }
 .hangman .missed {
   color: #525252;
+}
+@media (min-width: 460px) {
+  .hangman h1 {
+    font-size: 2em;
+    transition: font-size 1s;
+  }
+}
+@media (min-width: 600px) {
+  .hangman h1 {
+    font-size: 2.4em;
+    transition: font-size 1s;
+  }
+}
+@media (min-width: 1000px) {
+  .hangman {
+    margin-top: 0;
+  }
 }
 
 /*** alphabet & definition **************/
 .alphabet {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
+  justify-content: center;
+  padding: 0 15px;
 }
 .alphabet h4 {
   margin: 0;
@@ -216,8 +169,15 @@ main {
   cursor: not-allowed;
 }
 .definition {
+  text-align: center;
+  margin: 0;
   max-width: 450px;
   line-height: 1.5;
+}
+@media (min-width: 1000px) {
+  .alphabet {
+    padding: 0;
+  }
 }
 
 /*** buttons ****************************/
@@ -233,8 +193,21 @@ button:hover {
   border: 1px solid #2a2a2a;
   cursor: pointer;
 }
+.start button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+.title {
+  text-align: center;
+}
 
 /*** guess button/input ******************/
+.guess form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .guess button {
   width: 160px;
   height: 70px;
@@ -264,6 +237,7 @@ button:hover {
 
 /*** hint ********************************/
 .hint {
+  text-align: center;
   margin-bottom: 0;
   color: #525252;
 }
@@ -279,6 +253,8 @@ button:hover {
 /*** won/lost message ********************/
 .won-lost h1 {
   font-size: 3.4em;
+  text-align: center;
+  margin-bottom: 0;
 }
 .won {
   color: #fff;
@@ -287,7 +263,7 @@ button:hover {
   color: #b02727;
 }
 
-/*** won/lost message ********************/
+/*** error modal ************************/
 .error-modal {
   position: relative;
   top: 60px;

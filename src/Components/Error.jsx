@@ -1,5 +1,7 @@
 import React from 'react';
 
+// The Error component renders an error message.
+
 function Error(props) {
   return (
     <div>

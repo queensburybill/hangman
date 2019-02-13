@@ -2,7 +2,8 @@ import React from 'react';
 import Alphabet from './Alphabet';
 import Definition from './Definition';
 
-// renders the hangman puzzle, alphabet list and definition
+// The Hangman component renders the hangman puzzle, alphabet list and definition.
+
 function Hangman(props) {
 
   let isGameOff = props.gameStatus === "off";
