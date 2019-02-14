@@ -123,6 +123,9 @@ main {
 }
 
 /*** hangman ****************************/
+.off .word {
+  display: none;
+}
 .hangman {
   display: flex;
   flex-direction: row;
@@ -137,6 +140,9 @@ main {
   display: inline;
   margin-bottom: 0;
   transition: font-size 1s;
+}
+.won .hangman h1 {
+  color: #fff;
 }
 .hangman .missed {
   color: #525252;
@@ -160,6 +166,13 @@ main {
 }
 
 /*** alphabet & definition **************/
+.off .alphabet,
+.won .alphabet,
+.lost .alphabet,
+.off .definition,
+.running .definition {
+  display: none;
+}
 .alphabet {
   display: flex;
   flex-wrap: wrap;
@@ -231,6 +244,11 @@ button:hover {
 }
 
 /*** guess button/input ******************/
+.off .guess,
+.won .guess,
+.lost .guess {
+  display: none;
+}
 .guess form {
   display: flex;
   flex-direction: row;
@@ -279,16 +297,20 @@ button:hover {
 }
 
 /*** won/lost message ********************/
+.off .won-lost,
+.running .won-lost {
+  display: none;
+}
+.won .won-lost h1 {
+  color: #fff;
+}
+.lost .won-lost h1 {
+  color: #b02727;
+}
 .won-lost h1 {
   font-size: 3.4em;
   text-align: center;
   margin-bottom: 0;
-}
-.won {
-  color: #fff;
-}
-.lost {
-  color: #b02727;
 }
 
 /*** error modal ************************/

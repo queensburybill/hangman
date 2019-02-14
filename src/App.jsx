@@ -27,7 +27,7 @@ const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
 class App extends Component {
   state = {
-    gameStatus: "off",
+    gameStatus: "off", // uses four states - off, running, won & lost
     hangman: "",
     token: "",
     solution: "",
@@ -260,8 +260,9 @@ class App extends Component {
   // ---  RENDER  -----------------------------------------------
 
   render() {
+    let gameStatus = this.state.gameStatus;
     return (
-      <div className="container">
+      <div className={`container ${gameStatus}`}>
         <Gallows 
           lettersWrong={this.state.lettersWrong}
         />
@@ -287,8 +288,6 @@ class App extends Component {
                     handleAlphabetGuess={this.handleAlphabetGuess}
                   />
                   <Guess
-                    gameStatus={this.state.gameStatus} 
-                    token={this.state.token}
                     guessInput={this.state.guessInput}
                     inputError={this.state.inputError}
                     isLoading={this.state.isLoading}

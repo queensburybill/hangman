@@ -3,29 +3,25 @@ import Alphabet from './Alphabet';
 import Definition from './Definition';
 
 // The Hangman component renders the hangman puzzle, alphabet list and definition.
+// It only display via CSS if the status of the game is not "off".
 
 function Hangman(props) {
 
-  let isGameOff = props.gameStatus === "off";
-
+  // decides whether to show the puzzle or the solution
   const word = props.gameStatus === "lost" 
     ? props.solution.split("")
     : props.hangman.split("");
 
   return (
-    // Hides puzzle if game is off
-    // Renders puzzle if game is running
-    <div className={isGameOff? "hide" : "word"}>
+    <div className="word">
       <div className="hangman">
 
-        {/* Renders solved puzzle with appropriate color styling if game is won or lost */}
+        {/* renders solved puzzle with appropriate color styling if game is won or lost */}
         {word.map((letter, i) => {
           return (
             <h1 
               key={`hangman-${i}`}
-              className={props.gameStatus === "won" 
-                  ? "won" 
-                  : props.gameStatus === "lost" && !props.lettersCorrect.includes(letter) 
+              className={props.gameStatus === "lost" && !props.lettersCorrect.includes(letter) 
                     ? "missed" 
                     : ""
               }
@@ -35,7 +31,6 @@ function Hangman(props) {
       </div>
       {/* an alphabet list to suggest choices and act as a reminder of used letters */}
       <Alphabet 
-        gameStatus={props.gameStatus}
         lettersCorrect={props.lettersCorrect}
         lettersWrong={props.lettersWrong}
         isLoading={props.isLoading}
@@ -43,7 +38,6 @@ function Hangman(props) {
         />
       {/* replaces alphabet list upon game completion */}
       <Definition 
-        gameStatus={props.gameStatus}
         definition={props.definition} 
       />
     </div>

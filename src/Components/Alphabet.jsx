@@ -2,17 +2,15 @@ import React from 'react';
 
 // The Alphabet component enders the letters of the alphabet as clickable elements
 // for the user and indicates previous correct & incorrect choices.
-// It only appears when game status is "running".
+// CSS causes the component display only when the game status is "running".
 
 function Alphabet(props) {
 
   // It would be cheaper to do "abcd...".split(""), but I'm trying to look clever here.
   const alphabet = [...Array(26).keys()].map(num => String.fromCharCode(num + 97));
 
-  let isGameRunning = props.gameStatus === "running";
-
   return (
-    <div className={isGameRunning ? "alphabet" : "hide"}>
+    <div className="alphabet">
       {alphabet.map(letter => {
         // letters are checked against previously used correct/wrong letters
         // in state and styled accordingly.
