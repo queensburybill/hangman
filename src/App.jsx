@@ -60,7 +60,7 @@ class App extends Component {
   }
 
   // add user-typed letter to input field via state
-  handleUserGuess = (e) => {
+  handleGuessInput = (e) => {
     let guessInput = e.target.value;
     this.setState({ guessInput });
   }
@@ -89,8 +89,14 @@ class App extends Component {
   // send http request for guess - disallow empty guess
   handleSubmitGuess = (e) => {
     e.preventDefault();
-    if (!this.state.guessInput) {
-      this.setState({ inputError: true });
+    let guessInput = this.state.guessInput;
+    let allowed = /[a-z]/;
+    if (!guessInput || !allowed.test(guessInput)) {
+      e.target.blur();
+      this.setState({ 
+        inputError: true,
+        guessInput: ""
+      });
       return;
     }
     this.submitGuess();
@@ -291,7 +297,7 @@ class App extends Component {
                     guessInput={this.state.guessInput}
                     inputError={this.state.inputError}
                     isLoading={this.state.isLoading}
-                    handleUserGuess={this.handleUserGuess}
+                    handleGuessInput={this.handleGuessInput}
                     handleGetHint={this.handleGetHint}
                     handleSubmitGuess={this.handleSubmitGuess}
                   />

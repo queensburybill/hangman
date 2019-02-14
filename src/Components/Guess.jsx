@@ -12,7 +12,7 @@ function Guess(props) {
           value={props.guessInput}
           id="guess-input"
           maxLength={1}
-          onChange={e => props.handleUserGuess(e)}
+          onChange={e => props.handleGuessInput(e)}
           className={props.inputError ? "repeat" : ""}
         />
         <button 
