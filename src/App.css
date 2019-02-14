@@ -238,7 +238,6 @@ button:hover {
 }
 @media (min-width: 1000px) {
   .start button {
-    padding: 0;
     margin-bottom: 20px;
   }
 }
