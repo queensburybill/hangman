@@ -18,180 +18,147 @@
   position: relative;
   width: 340px;
   height: 490px;
+  padding: 10px;
   margin: 0 auto;
   background-color: #000;
+  /* border: 1px solid #525252; */
+}
+.gallows-wrap {
+  width: 300px;
+  height: 450px;
+  position: relative;
 }
 .gallows {
   position: absolute;
   background-color: #b2b2b2;
 }
 .gallows-a {
-  top: 10px;
-  left: 174px;
+  top: 0px;
+  left: 164px;
   width: 20px;
   height: 80px;
 }
 .gallows-b {
-  top: 10px;
-  left: 42px;
+  top: 0px;
+  left: 32px;
   width: 152px;
   height: 20px;
 }
 .gallows-c {
-  top: 10px;
-  left: 42px;
+  top: 0px;
+  left: 32px;
   width: 20px;
   height: 450px;
 }
 .gallows-d {
-  top: 440px;
-  left: 10px;
+  top: 430px;
+  left: 0;
   width: 300px;
   height: 20px;
 }
 .body-torso {
-  top: 110px;
-  left: 181px;
+  position: absolute;
+  background-color: #b2b2b2;
+  top: 100px;
+  left: 171px;
   width: 6px;
   height: 198px;
+  transition: background-color 0s linear 0s;
+}
+.lost .body-torso {
+  background-color: #b02727;
 }
 .body-leg-r {
-  top: 294px;
-  left: 207px;
+  position: absolute;
+  background-color: #b2b2b2;
+  top: 284px;
+  left: 197px;
   width: 6px;
   height: 94px;
   transform: rotate(-35deg);
+  transition: background-color 0s linear 0s, top .1s linear 1s, left .1s linear 1s, transform .1s linear 1s;
+}
+.lost .body-leg-r {
+  background-color: #b02727;
+  top: 289px;
+  left: 190px;
+  transform: rotate(-23deg);
 }
 .body-leg-l {
-  top: 294px;
-  left: 155px;
+  position: absolute;
+  background-color: #b2b2b2;
+  top: 284px;
+  left: 145px;
   width: 6px;
   height: 94px;
   transform: rotate(35deg);
+  transition: background-color 0s linear 0s, top .1s linear 1s, left .1s linear 1s, transform .1s linear 1s;
+}
+.lost .body-leg-l {
+  background-color: #b02727;
+  top: 289px;
+  left: 152px;
+  transform: rotate(23deg);
 }
 .body-arm-r {
-  top: 170px;
-  left: 207px;
+  position: absolute;
+  background-color: #b2b2b2;
+  top: 160px;
+  left: 197px;
   width: 6px;
   height: 94px;
   transform: rotate(-35deg);
+  transition: background-color 0s linear 0s, top .1s linear 1s, left .1s linear 1s, transform .1s linear 1s;
+}
+.lost .body-arm-r {
+  background-color: #b02727;
+  top: 165px;
+  left: 190px;
+  transform: rotate(-23deg);
 }
 .body-arm-l {
-  top: 170px;
-  left: 155px;
+  position: absolute;
+  background-color: #b2b2b2;
+  top: 160px;
+  left: 145px;
   width: 6px;
   height: 94px;
   transform: rotate(35deg);
+  transition: background-color 0s linear 0s, top .1s linear 1s, left .1s linear 1s, transform .1s linear 1s;
+}
+.lost .body-arm-l {
+  background-color: #b02727;
+  top: 165px;
+  left: 152px;
+  transform: rotate(23deg);
 }
 .body-head {
   position: absolute;
   background-color: #000;
   border-radius: 62px;
   border: 6px solid #b2b2b2;
-  top: 60px;
-  left: 134px;
+  top: 50px;
+  left: 124px;
   width: 100px;
   height: 100px;
+  transition: border-color 0s linear 0s, top .1s linear 1s, left .1s linear 1s, transform .1s linear 1s;;
 }
-.red {
-  background-color: #b02727;
-}
-.body-head.red {
-  background-color: #000;
+.lost .body-head {
   border-color: #b02727;
+  top: 65px;
+  left: 100px;
+  transform: rotate(0deg);
 }
 
 /****************************************/
 /*** RESPONSIVE *************************/
 /****************************************/
 
+
 @media (min-width: 1000px) {
   .canvas {
-    position: relative;
-    width: 340px;
-    height: 490px;
     float: left;
+    padding: 20px;
     margin: 0;
-    background-color: #000;
-    /* border: 1px solid #525252; */
-  }
-  .gallows {
-    position: absolute;
-    background-color: #b2b2b2;
-  }
-  .gallows-a {
-    top: 20px;
-    left: 184px;
-    width: 20px;
-    height: 80px;
-  }
-  .gallows-b {
-    top: 20px;
-    left: 52px;
-    width: 152px;
-    height: 20px;
-  }
-  .gallows-c {
-    top: 20px;
-    left: 52px;
-    width: 20px;
-    height: 450px;
-  }
-  .gallows-d {
-    top: 450px;
-    left: 20px;
-    width: 300px;
-    height: 20px;
-  }
-  .body-torso {
-    top: 120px;
-    left: 191px;
-    width: 6px;
-    height: 198px;
-  }
-  .body-leg-r {
-    top: 304px;
-    left: 217px;
-    width: 6px;
-    height: 94px;
-    transform: rotate(-35deg);
-  }
-  .body-leg-l {
-    top: 304px;
-    left: 165px;
-    width: 6px;
-    height: 94px;
-    transform: rotate(35deg);
-  }
-  .body-arm-r {
-    top: 180px;
-    left: 217px;
-    width: 6px;
-    height: 94px;
-    transform: rotate(-35deg);
-  }
-  .body-arm-l {
-    top: 180px;
-    left: 165px;
-    width: 6px;
-    height: 94px;
-    transform: rotate(35deg);
-  }
-  .body-head {
-    position: absolute;
-    background-color: #000;
-    border-radius: 62px;
-    border: 6px solid #b2b2b2;
-    top: 70px;
-    left: 144px;
-    width: 100px;
-    height: 100px;
-  }
-  .red {
-    background-color: #b02727;
-  }
-  .body-head.red {
-    background-color: #000;
-    border-color: #b02727;
   }
 }
