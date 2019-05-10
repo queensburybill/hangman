@@ -1,6 +1,6 @@
 # Hangman
 
-The hangman app is designed for use with the [hangman-api](http://hangman-api.herokuapp.com/api) by [despo](https://github.com/despo/hangman) and also borrows stylistically from the despo app. THE REASON THIS APP RUNS SLOWLY: As of this writing the hangman-api includes an issue where one of the response headers doesn't set Access-Control-Allow-Origin to "*," thus causing a CORS error. My workaround for this is to prepend the API with a proxy server to avoid the browser's preflight request, however that appears to greatly influence the performance of the app. Eventually I'll build my own REST API to rectify this. Enjoy the game!
+The hangman app is designed for use with the [hangman-api](http://hangman-api.herokuapp.com/api) by [despo](https://github.com/despo/hangman) and also borrows stylistically from the despo app. THE REASON THIS APP RUNS SLOWLY: As of this writing the hangman-api includes an issue where one of the response headers doesn't set `Access-Control-Allow-Origin: *`, thus causing a CORS error. My workaround for this is to prepend the API with a proxy server to avoid the browser's preflight request, however that appears to greatly influence the performance of the app. Eventually I'll build my own REST API to rectify this. Enjoy the game!
 
 ![Screen shot with game in progress ](./screenshots/hangman-sg.jpg?raw=true "Hangman")
 
