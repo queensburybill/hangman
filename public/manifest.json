@@ -8,7 +8,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "scope": "/hangman/",
+  "start_url": "/hangman/public/index.html",
   "display": "standalone",
   "theme_color": "#b2b2b2",
   "background_color": "#000"

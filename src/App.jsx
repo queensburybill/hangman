@@ -221,7 +221,8 @@ class App extends Component {
           solution: response.solution,
           token: response.token,
           isGameLoading: false
-        }, () => this.getDefinition(wordnikApiKey));
+        }, () => this.getDefinition(wordnikApiKey)
+        );
       })
       .catch((error)=> {
         this.handleGameError(error);
