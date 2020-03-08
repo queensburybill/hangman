@@ -135,8 +135,7 @@ main {
 .hangman h1 {
   font-size: 1.5em;
   display: inline;
-  margin-bottom: 0;
-  transition: font-size 1s;
+  transition: font-size 1s ease-out;
 }
 .hangman .missed {
   color: #525252;
@@ -144,13 +143,13 @@ main {
 @media (min-width: 460px) {
   .hangman h1 {
     font-size: 2em;
-    transition: font-size 1s;
+    transition: font-size 1s ease-out;
   }
 }
 @media (min-width: 600px) {
   .hangman h1 {
     font-size: 2.4em;
-    transition: font-size 1s;
+    transition: font-size 1s ease-out;
   }
 }
 @media (min-width: 1000px) {
@@ -174,6 +173,7 @@ main {
 .alphabet h4:hover {
   background-color: #191919;
   cursor: pointer;
+  transition: background-color 0.3s ease-out;
 }
 .alphabet .correct {
   color: #525252;
@@ -185,10 +185,12 @@ main {
 .alphabet h4.wrong:hover {
   background-color: #000;
   cursor: pointer;
+  transition: background-color 0.3s ease-out;
 }
 .alphabet h4.alphabet-prevent:hover {
   background-color: #000;
   cursor: not-allowed;
+  transition: background-color 0.3s ease-out;
 }
 .definition {
   text-align: center;
@@ -214,6 +216,7 @@ button:hover {
   background-color: #2a2a2a;
   border: 1px solid #2a2a2a;
   cursor: pointer;
+  transition: all 0.3s ease-out;
 }
 .start button {
   margin-left: auto;
@@ -272,10 +275,12 @@ button:hover {
 .hint:hover {
   color: #b2b2b2;
   cursor: pointer;
+  transition: all 0.3s ease-out;
 }
 .hint-prevent:hover {
   color: #525252;
   cursor: not-allowed;
+  transition: all 0.3s ease-out;
 }
 
 /*** won/lost message ********************/
@@ -327,4 +332,5 @@ button:hover {
 .error-modal-close:hover {
   color: #2a2a2a;
   cursor: pointer;
+  transition: all 0.3s ease-out;
 }
