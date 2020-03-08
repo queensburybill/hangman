@@ -27,11 +27,11 @@ const wordnikApiKey = "a0b2b713bac5c6eab030c0fb4b9026fd1afb4aade138cdc3e";
 
 class App extends Component {
   state = {
-    gameStatus: "off",
+    gameStatus: "off", // uses four states - off, running, won & lost
     hangman: "",
     token: "",
     solution: "",
-    definition: "Here's a much much longer placeholder definition for now", // switch this to ""
+    definition: "",
     guessInput: "",
     inputError: false,
     lettersWrong: [],
@@ -63,7 +63,7 @@ class App extends Component {
   };
 
   // add user-typed letter to input field via state
-  handleUserGuess = e => {
+  handleGuessInput = (e) => {
     let guessInput = e.target.value;
     this.setState({ guessInput });
   };
@@ -95,8 +95,14 @@ class App extends Component {
   // send http request for guess - disallow empty guess
   handleSubmitGuess = e => {
     e.preventDefault();
-    if (!this.state.guessInput) {
-      this.setState({ inputError: true });
+    let guessInput = this.state.guessInput;
+    let allowed = /[a-z]/;
+    if (!guessInput || !allowed.test(guessInput)) {
+      e.target.blur();
+      this.setState({ 
+        inputError: true,
+        guessInput: ""
+      });
       return;
     }
     this.submitGuess();
@@ -229,13 +235,11 @@ class App extends Component {
     this.setState({ isGameLoading: true });
     return this.send(`${hangmanApi}/hangman`, { token })
       .then(response => {
-        this.setState(
-          {
-            solution: response.solution,
-            token: response.token,
-            isGameLoading: false
-          },
-          () => this.getDefinition(wordnikApiKey) // TURN THIS BACK ON WHEN READY!!!
+        this.setState({
+          solution: response.solution,
+          token: response.token,
+          isGameLoading: false
+        }, () => this.getDefinition(wordnikApiKey)
         );
       })
       .catch(error => {
@@ -291,9 +295,12 @@ class App extends Component {
   // ---  RENDER  -----------------------------------------------
 
   render() {
+    let gameStatus = this.state.gameStatus;
     return (
-      <div className="container">
-        <Gallows lettersWrong={this.state.lettersWrong} />
+      <div className={`container ${gameStatus}`}>
+        <Gallows 
+          lettersWrong={this.state.lettersWrong}
+        />
         <div className="interface">
           <main>
             {this.state.isGameLoading ? (
@@ -301,37 +308,37 @@ class App extends Component {
               <GameLoading />
             ) : this.state.isGameError ? (
               // shows an error widget if there's a problem creating a new game
-              <Error errorMessage={this.state.errorMessage} />
-            ) : (
-              // views are shown or hidden based on the state of the game and CSS
-              <div>
-                <Hangman
-                  gameStatus={this.state.gameStatus}
-                  hangman={this.state.hangman}
-                  solution={this.state.solution}
-                  lettersCorrect={this.state.lettersCorrect}
-                  lettersWrong={this.state.lettersWrong}
-                  definition={this.state.definition}
-                  isLoading={this.state.isLoading}
-                  handleAlphabetGuess={this.handleAlphabetGuess}
-                />
-                <Guess
-                  gameStatus={this.state.gameStatus}
-                  token={this.state.token}
-                  guessInput={this.state.guessInput}
-                  inputError={this.state.inputError}
-                  isLoading={this.state.isLoading}
-                  handleUserGuess={this.handleUserGuess}
-                  handleGetHint={this.handleGetHint}
-                  handleSubmitGuess={this.handleSubmitGuess}
-                />
-                <WonLostMessage gameStatus={this.state.gameStatus} />
-                <NewGame
-                  gameStatus={this.state.gameStatus}
-                  handleNewGame={this.handleNewGame}
-                />
-              </div>
-            )}
+              ? <Error errorMessage={this.state.errorMessage} />
+              : (
+                // views are shown or hidden with CSS based on the state of the game
+                <div>
+                  <Hangman 
+                    gameStatus={this.state.gameStatus}
+                    hangman={this.state.hangman} 
+                    solution={this.state.solution}
+                    lettersCorrect={this.state.lettersCorrect}
+                    lettersWrong={this.state.lettersWrong}
+                    definition={this.state.definition} 
+                    isLoading={this.state.isLoading}
+                    handleAlphabetGuess={this.handleAlphabetGuess}
+                  />
+                  <Guess
+                    guessInput={this.state.guessInput}
+                    inputError={this.state.inputError}
+                    isLoading={this.state.isLoading}
+                    handleGuessInput={this.handleGuessInput}
+                    handleGetHint={this.handleGetHint}
+                    handleSubmitGuess={this.handleSubmitGuess}
+                  />
+                  <WonLostMessage
+                    gameStatus={this.state.gameStatus} 
+                  />
+                  <NewGame 
+                    gameStatus={this.state.gameStatus}
+                    handleNewGame={this.handleNewGame}
+                  />
+                </div>
+              )}
           </main>
           {this.state.isError && (
             // a pop-up which allows one to possibly keep playing after an error
